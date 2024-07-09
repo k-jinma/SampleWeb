@@ -16,6 +16,10 @@ public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 
+	/**
+	 * "/member"にアクセスされた場合の処理
+     * "/jsp/newmember-mailaddress-view.jsp"に遷移する
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
@@ -26,30 +30,36 @@ public class MemberController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String email = request.getParameter("mailaddress");
+		String path = request.getParameter("path");
 		
-		if( email.trim().length() == 0 ){
-			request.setAttribute("message", "メールアドレスは必須入力項目です。");
+		if( path.equals("mailaddress-view") ) {
 			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
-	        dispatcher.forward(request, response);
-	        
-		}else {
-			MemberDAO mDao= new MemberDAO();
-			boolean kekka = mDao.mailCheck(email);
-			if( kekka == true ) {
-				//みつかった＝既に登録されています
-				request.setAttribute("message", "すでに登録されています。");
+			String email = request.getParameter("mailaddress");
+			
+			if( email.trim().length() == 0 ){
+				request.setAttribute("message", "メールアドレスは必須入力項目です。");
 				
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
-		        dispatcher.forward(request, response);
+				dispatcher.forward(request, response);
 				
 			}else {
-				//みつからなかった＝登録ページへ
+				MemberDAO mDao= new MemberDAO();
+				boolean kekka = mDao.mailCheck(email);
+				if( kekka == true ) {
+					//みつかった＝既に登録されています
+					request.setAttribute("message", "すでに登録されています。");
+					
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
+					dispatcher.forward(request, response);
+					
+				}else {
+					//みつからなかった＝登録ページへ
+					
+				}
 				
 			}
-			
 		}
+		
 	}
 
 }

@@ -65,7 +65,7 @@
 	<main>
 		<p>メールアドレス入力</p>
 		<p class="message">${message}</p>
-		<form action="/SampleWeb/member" method="post">
+		<form action="/SampleWeb/member?path=mailaddress-view" method="post">
 			メールアドレス　<input type="text" name="mailaddress">
 			<br>
 			<input type="submit" value="確認">
