@@ -19,7 +19,7 @@ public class MemberDAO {
 	public boolean mailCheck( String email ) {
 		
 		// 本当は、"SELECT * FROM member WHERE memberId = ?;";と定義する
-		String sql = "SELECT * FROM member WHERE memberId = '" + email + "';";
+		String sql = "SELECT * FROM members WHERE member_id = '" + email + "';";
 		
 		Statement smt;
 		try {

@@ -32,33 +32,61 @@ public class MemberController extends HttpServlet {
 		
 		String path = request.getParameter("path");
 		
-		if( path.equals("mailaddress-view") ) {
+		switch (path) {
 			
-			String email = request.getParameter("mailaddress");
-			
-			if( email.trim().length() == 0 ){
-				request.setAttribute("message", "メールアドレスは必須入力項目です。");
+		//mailaddress-view.jspからの遷移
+			case "mailaddress-view":
 				
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
-				dispatcher.forward(request, response);
+				String email = request.getParameter("mailaddress");
 				
-			}else {
-				MemberDAO mDao= new MemberDAO();
-				boolean kekka = mDao.mailCheck(email);
-				if( kekka == true ) {
-					//みつかった＝既に登録されています
-					request.setAttribute("message", "すでに登録されています。");
+				if( email.trim().length() == 0 ){
+					request.setAttribute("message", "メールアドレスは必須入力項目です。");
 					
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
 					dispatcher.forward(request, response);
 					
 				}else {
-					//みつからなかった＝登録ページへ
+					MemberDAO mDao= new MemberDAO();
+					boolean kekka = mDao.mailCheck(email);
+					if( kekka == true ) {
+						//みつかった＝既に登録されています
+						request.setAttribute("message", "すでに登録されています。");
+						
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-mailaddress-view.jsp");
+						dispatcher.forward(request, response);
+						
+					}else {
+						//みつからなかった＝登録ページへ
+						request.setAttribute("email", email);
+						
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/newmember-input-view.jsp");
+						dispatcher.forward(request, response);
+					}
 					
 				}
+				break;	
 				
-			}
-		}
+		//input-view.jspからの遷移
+			case "newmember-input":
+                
+				// 入力パラメータを取得
+				String memberId = request.getParameter("memberId");
+				String memberName  = request.getParameter("memberName");
+				String gender = request.getParameter("gender");
+				String address = request.getParameter("address");
+				String phone = request.getParameter("phone");
+				String password = request.getParameter("password");
+				String passwordChk = request.getParameter("passwordChk");
+				
+				// 入力チェック
+
+				MemberDAO mDao = new MemberDAO();
+				//mDao.insertMember(memberId, memberName,gender,address,phone,password);
+				
+				break;
+                
+        }
+		
 		
 	}
 
