@@ -1,34 +1,19 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MemberDAO {
 	
-	// コンストラクタでDBに接続した情報を持つフィールド。
-	// これはMemberDAO全体で利用するため、フィールドとして定義する
+	private ConnectionManager cm;
 	private Connection con;
-
+	
 	// コンストラクタ
 	public MemberDAO() {
-		//DBに接続する
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			String url = "jdbc:mysql://localhost:3306/acompany";
-			String user = "root";
-			String password = "root";
-			con = DriverManager.getConnection(url,user,password);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
+		cm = ConnectionManager.getInstance();
+		con = cm.getConnection();
 	}
 	
 	public boolean mailCheck( String email ) {
